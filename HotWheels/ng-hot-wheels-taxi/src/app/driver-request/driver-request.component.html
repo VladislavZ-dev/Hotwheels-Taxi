@@ -1,0 +1,70 @@
+<div *ngIf="onGoingShifts.length === 0" class="no-shifts">
+  <p>{{noShift}}</p>
+</div>
+<div *ngIf="onGoingShifts.length > 0">
+<h2>Available Requests <span class="request-badge">{{ pendingRequestsCount }}</span></h2>
+<div *ngFor="let request of requests"  class="request-card {{request.status}}">
+  <div *ngIf="request._id && !rejectedRequestIds.includes(request._id)"  class="request-card {{request.status}}">
+    <p><strong>Status:</strong> <span class="status-badge {{request.status}}">{{ request.status | titlecase }}</span></p>
+    <div *ngIf="request.distance !== undefined" class="distance-info">
+      <p><strong>Distance from you:</strong> {{ request.distance | number:'1.1-1' }} km</p>
+      <p><strong>Estimated Time:</strong> {{ priceService.formatEstimatedTime(request.distance ? request.distance * 4 : 1) }}</p>
+    </div>
+
+  <!-- Customer Information -->
+  <h3>{{ request.customer.name }} (NIF: {{ request.customer.nif }})</h3>
+  <p>Gender: {{ request.customer.gender | titlecase }}</p>
+
+  
+  <!-- Pickup Location -->
+  <div class="address-section">
+    <h4>Pickup Location:</h4>
+    <p>{{ request.pickup.address.street }}, {{ request.pickup.address.doorNumber }}</p>
+    <p>{{ request.pickup.address.postCode }} {{ request.pickup.address.locality }}</p>
+    <div *ngIf="request.pickup.coordinates" class="coordinates">
+      (Lat: {{ request.pickup.coordinates.lat | number:'1.4-4' }}, 
+      Lng: {{ request.pickup.coordinates.lng | number:'1.4-4' }})
+    </div>
+  </div>
+
+  <!-- Destination -->
+  <div class="address-section">
+    <h4>Destination:</h4>
+    <p>{{ request.destination.address.street }}, {{ request.destination.address.doorNumber }}</p>
+    <p>{{ request.destination.address.postCode }} {{ request.destination.address.locality }}</p>
+    <div *ngIf="request.destination.coordinates" class="coordinates">
+      (Lat: {{ request.destination.coordinates.lat | number:'1.4-4' }}, 
+      Lng: {{ request.destination.coordinates.lng | number:'1.4-4' }})
+    </div>
+  </div>
+
+  <!-- Trip Details -->
+  <div class="trip-details">
+    <p><strong>Passengers:</strong> {{ request.passengers }}</p>
+    <p><strong>Status:</strong> {{ request.status | titlecase }}</p>
+    <p><strong>Requested:</strong> {{ request.timestamps.requested | date:'medium' }}</p>
+  </div>
+
+  <!-- Driver Actions -->
+  <div *ngIf="request.status === 'pending'" class="actions">
+    <button (click)="acceptRequest(request._id, request.distance)" class="accept-btn">
+      Accept Request (ETA: {{ priceService.formatEstimatedTime(request.distance ? request.distance * 4 : 1) }})
+    </button>
+  </div>
+
+  <!-- Driver Info (when accepted) -->
+  <div *ngIf="request.status === 'driver_accepted' && request.driver" class="driver-info">
+    <h4>Driver Information:</h4>
+    <p>Name: {{ request.driver.info.person?.name || 'N/A' }}</p>
+    <p>License: {{ request.driver.info.driversLicense }}</p>
+    <p *ngIf="request.driver.estimatedArrival">ETA: {{ request.driver.estimatedArrival }} minutes</p>
+    <p>Accepted at: {{ request.timestamps.driverAccepted | date:'shortTime' }}</p>
+  </div>
+</div>
+
+<!-- Status Messages -->
+<div *ngIf="requests.length === 0" class="no-requests">
+  <p>No available requests at the moment.</p>
+</div>
+</div>
+</div>

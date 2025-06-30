@@ -1,0 +1,65 @@
+<div [formGroup]="addressForm">
+  <div>
+    <label for="street">Street:</label>
+    <input
+      id="street"
+      formControlName="street"
+      placeholder="Main Street"
+      autocomplete="street-address"
+    />
+    <div *ngIf="addressForm.get('street')?.invalid && (addressForm.get('street')?.touched || addressForm.get('street')?.dirty)">
+      Street is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="doorNumber">Door Number:</label>
+    <input
+      id="doorNumber"
+      type="text"  
+      formControlName="doorNumber"
+      placeholder="123"
+      autocomplete="off"
+    />
+    <div *ngIf="addressForm.get('doorNumber')?.invalid && (addressForm.get('doorNumber')?.touched || addressForm.get('doorNumber')?.dirty)">
+      <div *ngIf="addressForm.get('doorNumber')?.errors?.['required']">
+        Door number is required.
+      </div>
+      <div *ngIf="addressForm.get('doorNumber')?.errors?.['pattern']">
+        Please enter a valid number.
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <label for="postCode">Post Code:</label>
+    <input
+      id="postCode"
+      formControlName="postCode"
+      placeholder="1234-567"
+      autocomplete="postal-code"
+    />
+    <div *ngIf="addressForm.get('postCode')?.invalid && (addressForm.get('postCode')?.touched || addressForm.get('postCode')?.dirty)">
+      <div *ngIf="addressForm.get('postCode')?.errors?.['required']">
+        Post code is required.
+      </div>
+      <div *ngIf="addressForm.get('postCode')?.errors?.['pattern']">
+        Post code must be in the format 1234-567.
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <label for="locality">Locality:</label>
+    <input
+      id="locality"
+      formControlName="locality"
+      placeholder="Lisbon"
+      autocomplete="address-level2"
+      [readonly]="true"  
+    />
+    <div *ngIf="addressForm.get('locality')?.invalid && (addressForm.get('locality')?.touched || addressForm.get('locality')?.dirty)">
+      Locality is required.
+    </div>
+  </div>
+</div>

@@ -1,0 +1,187 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+<div class="request-container">
+<form  *ngIf="!requestSubmitted" [formGroup]="requestForm" (ngSubmit)="onSubmit()" class="request-form">
+  <h2>Request a Taxi</h2>
+  
+  <!-- Customer Information -->
+  <div class="form-section">
+    <h3>Your Information</h3>
+    
+    <div class="form-group">
+      <label for="name">Full Name*</label>
+      <input id="name" formControlName="name" placeholder="Your full name">
+      <div *ngIf="requestForm.get('name')?.invalid && (requestForm.get('name')?.dirty || requestForm.get('name')?.touched)"
+           class="error-message">
+        Name is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="nif">NIF* (9 digits)</label>
+      <input id="nif" formControlName="nif" placeholder="123456789">
+      <div *ngIf="requestForm.get('nif')?.errors?.['required']" class="error-message">
+        NIF is required
+      </div>
+      <div *ngIf="requestForm.get('nif')?.errors?.['pattern']" class="error-message">
+        Invalid NIF format (must be 9 digits)
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="gender">Gender*</label>
+      <select id="gender" formControlName="gender">
+        <option value="" disabled selected>Select gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+      <div *ngIf="requestForm.get('gender')?.invalid && requestForm.get('gender')?.touched" class="error-message">
+        Please select your gender
+      </div>
+    </div>
+  </div>
+
+  <!-- Pickup Location -->
+  <div class="form-section">
+    <h3>Pickup Location</h3>
+    
+    <!-- Use Current Location Button -->
+    <div class="form-group">
+      <button type="button" 
+              class="current-location-btn"
+              (click)="getCurrentLocation()" 
+              [disabled]="currentLocationLoading">
+        <span *ngIf="!currentLocationLoading">📍 Use My Current Location</span>
+        <span *ngIf="currentLocationLoading">⏳ Locating...</span>
+      </button>
+    </div>
+
+    <div class="form-group">
+      <label for="street">Street*</label>
+      <input id="street" name="street" formControlName="street" 
+             placeholder="Main Street" autocomplete="street-address address-line1">
+    </div>
+    
+    <div class="form-group">
+      <label for="doorNumber">Door Number*</label>
+      <input id="doorNumber" name="doorNumber" formControlName="doorNumber" 
+             placeholder="42" autocomplete="address-line2">
+    </div>
+    
+    <div class="form-group">
+      <label for="postCode">Post Code*</label>
+      <input id="postCode" name="postCode" formControlName="postCode" 
+             placeholder="1234-567" autocomplete="postal-code">
+    </div>
+    
+    <div class="form-group">
+      <label for="locality">Locality*</label>
+      <input id="locality" name="locality" formControlName="locality" 
+             placeholder="Lisbon" autocomplete="address-level2">
+    </div>
+  </div>
+  <!-- Destination Information -->
+<div class="form-section">
+  <h3>Destination</h3>
+  
+    <div class="form-group">
+      <button type="button" 
+              class="map-toggle-btn"
+              [class.active]="showMap"
+              (click)="toggleMapSelection()">
+        <span *ngIf="!showMap">🗺️ Select Destination on Map</span>
+        <span *ngIf="showMap">✏️ Enter Address Manually</span>
+      </button>
+    </div>
+  
+
+  <div *ngIf="!showMap">
+    <div class="form-group">
+      <label for="destStreet">Street*</label>
+      <input id="destStreet" formControlName="destStreet" placeholder="Destination Street">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="destDoorNumber">Door Number*</label>
+        <input id="destDoorNumber" type="number" formControlName="destDoorNumber" placeholder="10">
+      </div>
+
+      <div class="form-group">
+        <label for="destPostCode">Post Code*</label>
+        <input id="destPostCode" formControlName="destPostCode" placeholder="1000-001">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="destLocality">Locality*</label>
+      <input id="destLocality" formControlName="destLocality" placeholder="Lisbon">
+    </div>
+  </div>
+
+  <div *ngIf="showMap" class="map-container">
+    <div #mapContainer id="map"></div>
+      <div class="map-buttons">
+        <button type="button" (click)="confirmMapSelection()" class="map-confirm-btn" [disabled]="!marker">
+          Confirm Location
+        </button>
+        <button type="button" (click)="showMap = false" class="map-cancel-btn">
+        Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Trip Details -->
+  <div class="form-section">
+    <h3>Trip Information</h3>
+    
+    <div class="form-group">
+      <label for="passengers">Passengers*</label>
+      <input id="passengers" type="number" formControlName="passengers" min="1" value="1">
+      <div *ngIf="requestForm.get('passengers')?.errors?.['min']" class="error-message">
+        At least 1 passenger required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="comfort">Comfort Level*</label>
+      <select id="comfort" formControlName="comfort">
+        <option value="basic">Basic</option>
+        <option value="luxury">Luxury</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" [disabled]="requestForm.invalid" class="submit-btn">
+      Request Taxi
+    </button>
+  </div>
+</form>
+
+<div *ngIf="requestSubmitted" class="submission-result">
+  <div *ngIf="requestSuccess" class="success-message">
+    <h2>Taxi Request Successful!</h2>
+    <p>Your taxi has been requested and a driver will be assigned shortly.</p>
+    <button (click)="goToDashboard()" class="dashboard-btn">
+      Go to Dashboard
+    </button>
+  </div>
+  
+  <div *ngIf="!requestSuccess" class="error-message">
+    <h2>Request Failed</h2>
+    <p>{{ errorMessage }}</p>
+    <button (click)="retryRequest()" class="retry-btn">
+      Try Again
+    </button>
+  </div>
+</div>
+</div>

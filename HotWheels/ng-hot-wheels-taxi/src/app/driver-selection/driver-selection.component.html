@@ -1,0 +1,41 @@
+<div class="driver-selection">
+    <h2>Driver Login</h2>
+    
+    <form [formGroup]="driverForm" (ngSubmit)="onSubmitNif()">
+      <div class="form-group">
+        <label>Enter your NIF:</label>
+        <input formControlName="nif" placeholder="123456789" maxlength="9">
+        <div *ngIf="driverForm.get('nif')?.errors?.['pattern']" class="error">
+          Please enter a valid 9-digit NIF
+        </div>
+        <div *ngIf="errorMessage" class="error">
+          {{ errorMessage }}
+        </div>
+      </div>
+      <button type="submit" [disabled]="driverForm.invalid">Continue</button>
+    </form>
+  
+    <div class="divider">OR</div>
+  
+    <h3>Select from company drivers:</h3>
+    <div *ngIf="drivers$ | async as drivers">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>NIF</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let driver of drivers">   
+            <td>{{ driver.person?.name }}</td>
+            <td>{{ driver.person?.nif }}</td>
+            <td>
+              <button (click)="selectDriver(driver.person!.nif!)">Select</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

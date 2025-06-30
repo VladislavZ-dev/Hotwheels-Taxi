@@ -1,0 +1,46 @@
+<div class="price-container">
+    <h1>Price Table</h1>
+  
+    <table class="price-table" *ngIf="currentPrice">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Price (€ / min)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Basic</td>
+          <td>{{ formatPrice(currentPrice.basic) }}</td>
+        </tr>
+        <tr>
+          <td>Luxurious</td>
+          <td>{{ formatPrice(currentPrice.luxurious) }}</td>
+        </tr>
+        <tr>
+          <td>Night Fee (%)</td>
+          <td>{{ formatPrice(currentPrice.nightFee) }}%</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <h2>Update Prices</h2>
+    <form (ngSubmit)="submit()" class="price-form">
+      <label> Basic Price (€ / min):
+        <input type="number" [(ngModel)]="price.basic" name="basic" required min="0" step="0.01" />
+      </label><br />
+  
+      <label> Luxurious Price (€ / min):
+        <input type="number" [(ngModel)]="price.luxurious" name="luxurious" required min="0" step="0.01" />
+      </label><br />
+  
+      <label> Night Fee (%):
+        <input type="number" [(ngModel)]="price.nightFee" name="nightFee" required min="0" step="1" />
+      </label><br />
+  
+      <button type="submit" class="submit-btn" >Submit</button>
+    </form>
+  
+    <p *ngIf="message">{{ message }}</p>
+  </div>
+  

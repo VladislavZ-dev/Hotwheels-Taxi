@@ -1,0 +1,227 @@
+:host {
+    display: block;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+    min-height: 100vh;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  .dashboard-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  .container {
+    margin-left: 0;
+    width: 100%;
+    padding: 1.5rem;
+    border-radius: 0;
+    text-align: center;
+  }
+
+  header {
+
+    margin-bottom: 2rem;
+  }
+  
+  .header h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #2c387e;
+
+  }
+  
+  .dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .card {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  
+  .card h3 {
+    font-size: 1.6rem;
+    color: #444;
+  }
+  
+  .card p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #3f51b5;
+    margin-top: 1rem;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dashboard-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+ 
+  }
+
+  .btn-primary {
+    background-color: #3f51b5;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+  }
+  
+  .btn-primary:hover {
+    background-color: #2c387e;
+  }  
+  .pending-requests {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+  }
+  
+  .request-card {
+    background: white;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .request-info {
+    margin-bottom: 0.5rem;
+  }
+  
+  .no-requests {
+    margin-top: 2rem;
+    text-align: center;
+    color: #666;
+  }
+
+  .cancel-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #c82333;
+  }
+  
+  .request-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+.accepted-requests {
+  margin-bottom: 2rem;
+}
+
+.request-card.accepted {
+  border-left: 4px solid #4CAF50;
+}
+
+.request-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.confirm-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.reject-btn {
+  background-color: #f44336;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.confirm-btn:hover, .reject-btn:hover {
+  opacity: 0.8;
+}
+
+.driver-info, .taxi-info, .ride-info {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.driver-info h4, .taxi-info h4, .ride-info h4 {
+  margin-top: 0;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.request-info h3 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+.request-card {
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.request-card:hover {
+  transform: translateY(-2px);
+}
+
+.accepted-requests .request-card {
+  border: 1px solid #e0e0e0;
+}
+
+.pending-requests .request-card {
+  border: 1px solid #e0e0e0;
+}
+
+@media (max-width: 768px) {
+  .request-actions {
+    flex-direction: column;
+  }
+  
+  .confirm-btn, .reject-btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}

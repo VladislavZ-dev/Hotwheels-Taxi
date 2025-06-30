@@ -1,0 +1,30 @@
+<div class="trip-container">
+    <h1 class="title">Trip Simulator</h1>
+  
+    <form (ngSubmit)="calculateTripCost()" class="trip-form">
+      <div class="form-group">
+        <label for="startTime">Trip's Start Time:</label>
+        <input id="startTime" type="datetime-local" [(ngModel)]="startTime" name="startTime" required />
+      </div>
+  
+      <div class="form-group">
+        <label for="endTime">Trip's End Time:</label>
+        <input id="endTime" type="datetime-local" [(ngModel)]="endTime" name="endTime" required />
+      </div>
+  
+      <div class="form-group">
+        <label for="comfort">Confort Level:</label>
+        <select id="comfort" [(ngModel)]="comfort" name="comfort" required>
+          <option value="basic">Basic</option>
+          <option value="luxurious">Luxurious</option>
+        </select>
+      </div>
+  
+      <button type="submit" class="submit-btn">Calculate Cost</button>
+    </form>
+  
+    <div class="cost-display" *ngIf="cost !== null">
+      <p><strong>Estimated Cost:</strong> {{ formatCost(cost) }} €</p>
+    </div>
+  </div>
+  

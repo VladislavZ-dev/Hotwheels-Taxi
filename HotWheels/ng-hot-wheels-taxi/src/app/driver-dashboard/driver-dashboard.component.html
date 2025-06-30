@@ -1,0 +1,19 @@
+<div class="dashboard-container">
+  <div class="container">
+    <header>
+      <div class="header">
+        <h1 *ngIf="authService.currentDriver; else loading">
+          Welcome To Hot Wheels, {{ authService.currentDriver.person?.name || 'Driver' }}!
+        </h1>
+        <ng-template #loading>
+          <h1>Welcome To Hot Wheels!</h1>
+        </ng-template>
+      </div>
+    </header>
+
+    <section class="dashboard-actions">
+      <a routerLink="/driver/driver-request" routerLinkActive="active" class="btn-primary">View Taxi Requests</a>
+      <a routerLink="/driver/past-trips" routerLinkActive="active" class="btn-primary">View Past Trips</a>
+    </section>
+  </div>
+</div>

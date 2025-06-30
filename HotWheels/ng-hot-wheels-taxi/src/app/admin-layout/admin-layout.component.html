@@ -1,0 +1,19 @@
+<button class="toggle-sidebar-btn" (click)="toggleSidebar()">☰</button>
+<div >
+<div class="sidebar" [class.collapsed]="isSidebarCollapsed">
+  <h2 class="sidebar-title">
+    <a routerLink="/admin/admin-dashboard">Dashboard</a>
+  </h2>
+
+  <ul class="sidebar-links">
+    <li><a routerLink="/admin/drivers" routerLinkActive="active">Drivers</a></li>
+    <li><a routerLink="/admin/taxis" routerLinkActive="active">Taxis</a></li>
+    <li><a routerLink="/admin/trip-simulator" routerLinkActive="active">Trip Simulator</a></li>
+    <li><a routerLink="/admin/prices" routerLinkActive="active">Prices</a></li>
+    <li><a routerLink="/admin/reports" routerLinkActive="active">Reports</a></li>
+  </ul>
+</div>
+
+<main class="main-content" [class.sidebar-collapsed]="isSidebarCollapsed">
+  <router-outlet></router-outlet>
+</main>

@@ -1,0 +1,222 @@
+.reserve-taxi {
+  display: block;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #f4f6f9;
+  color: #333;
+  text-align: center;
+}
+
+.reserve-taxi h2, 
+.reserve-taxi h3 {
+  color: #2c387e;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+.reserve-form {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  margin-bottom: 2.5rem;
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.reserve-taxi label {
+  display: block;
+  font-weight: 600;
+  margin-top: 1.2rem;
+}
+
+.reserve-taxi input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.reserve-taxi input:focus {
+  outline: none;
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.15);
+}
+
+.reserve-taxi input.is-invalid {
+  border-color: #e53935;
+}
+
+.reserve-taxi input.is-invalid:focus {
+  box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.15);
+}
+
+.error-message {
+  color: #e53935;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.form-errors {
+  background-color: #ffebee;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.btn-continue {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-continue:hover:enabled {
+  background-color: #303f9f;
+}
+
+.btn-continue:disabled {
+  background-color: #b0bec5;
+  cursor: not-allowed;
+}
+
+.choose-taxi {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.taxi-list {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+}
+
+.taxi-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.taxi-list th {
+  background-color: #3f51b5;
+  color: white;
+  padding: 1rem;
+  text-align: left;
+}
+
+.taxi-list td {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: middle;
+}
+
+.taxi-list tr:hover {
+  background-color: #f5f5f5;
+}
+
+.btn-select {
+  padding: 0.5rem 1rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-select:hover {
+  background-color: #388e3c;
+}
+
+.no-taxis-message {
+  padding: 1.5rem;
+  background-color: #fff8e1;
+  border-radius: 8px;
+  color: #ff8f00;
+  font-weight: 500;
+  margin-top: 1.5rem;
+}
+
+.success-message {
+  background-color: #e8f5e9;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  margin-top: 2rem;
+}
+
+.success-message h3 {
+  color: #2c387e;
+  margin-bottom: 1.5rem;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background-color: #3f51b5;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  margin-top: 1rem;
+}
+
+.btn-primary:hover {
+  background-color: #303f9f;
+}
+
+@media (max-width: 768px) {
+  .reserve-taxi {
+    padding: 1.5rem;
+  }
+  
+  .reserve-form,
+  .choose-taxi,
+  .success-message {
+    padding: 1.5rem;
+  }
+  
+  .taxi-list th,
+  .taxi-list td {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .reserve-taxi {
+    padding: 1rem;
+  }
+  
+  .reserve-taxi h2 {
+    font-size: 1.5rem;
+  }
+  
+  .reserve-form,
+  .choose-taxi,
+  .success-message {
+    padding: 1rem;
+  }
+  
+  .btn-continue,
+  .btn-select,
+  .btn-primary {
+    padding: 0.75rem;
+  }
+}

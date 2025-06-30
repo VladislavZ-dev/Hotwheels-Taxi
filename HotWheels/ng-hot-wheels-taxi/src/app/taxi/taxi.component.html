@@ -1,0 +1,106 @@
+<div class="container">
+  <!-- Error message alert -->
+  <div *ngIf="showError" class="error-alert">
+    <div class="error-content">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ errorMessage }}</span>
+      <button class="close-btn" (click)="hideErrorMessage()">×</button>
+    </div>
+  </div>
+
+  <div class="taxi-actions">
+    <h1>Taxi Management</h1>
+    <button *ngIf="!showForm" (click)="toggleForm()" class="action-btn add-btn">
+      <i class="fas fa-plus"></i> Add New Taxi
+    </button>
+  </div>
+  
+  <div *ngIf="showForm" class="form-container">
+    <h2>{{ isEditing ? 'Edit' : 'Register' }} Taxi</h2>
+    <form [formGroup]="taxiForm" (ngSubmit)="onSubmit()">
+      <label>License Plate:</label>
+      <input 
+        formControlName="licensePlate" 
+        placeholder="AA-00-AA" 
+        (input)="formatLicensePlate($event)" 
+        maxlength="8"
+      />
+      <div *ngIf="taxiForm.get('licensePlate')?.invalid && taxiForm.get('licensePlate')?.touched" class="error-msg">
+        Invalid License Plate. Must be in format XX-XX-XX with at least one letter pair and one number pair.
+      </div>
+      
+      <label>Brand:</label>
+      <select formControlName="brand">
+        <option value="">--Select Brand--</option>
+        <option *ngFor="let b of brands" [value]="b">{{ b }}</option>
+      </select>
+      
+      <label>Model:</label>
+      <select formControlName="model">
+        <option value="">--Select Model--</option>
+        <option *ngFor="let m of models" [value]="m">{{ m }}</option>
+      </select>
+      
+      <label for="confortLevel">Comfort Level</label>
+      <select id="confortLevel" formControlName="confortLevel">
+        <option value="">-- Select --</option>
+        <option *ngFor="let level of confortLevels" [value]="level">
+          {{ level | titlecase }}
+        </option>
+      </select>
+      <div *ngIf="taxiForm.get('confortLevel')?.invalid && taxiForm.get('confortLevel')?.touched" class="error-msg">
+        Select the Comfort Level.
+      </div>
+      <div *ngIf="isEditing" class="info-msg">
+        <i class="fas fa-info-circle"></i> Comfort level can only be modified if the taxi has never made trips with clients.
+      </div>
+      
+      <label>Acquisition Year:</label>
+      <input type="number" formControlName="acquisitionYear" />
+      <div *ngIf="taxiForm.get('acquisitionYear')?.invalid && taxiForm.get('acquisitionYear')?.touched" class="error-msg">
+        Invalid year: must be between 1900 and {{ currentYear }}.
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="submit-btn" [disabled]="taxiForm.invalid">
+          {{ isEditing ? 'Update' : 'Register' }} Taxi
+        </button>
+        <button type="button" class="cancel-btn" (click)="toggleForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
+  
+  <h2>Taxis List</h2>
+  <table *ngIf="taxis.length > 0; else noTaxis">
+    <thead>
+      <tr>
+        <th>License Plate</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Year</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let taxi of taxis">
+        <td>{{ taxi.licensePlate }}</td>
+        <td>{{ taxi.brand }}</td>
+        <td>{{ taxi.model }}</td>
+        <td>{{ taxi.acquisitionYear }}</td>
+        <td class="actions-cell">
+          <button (click)="editTaxi(taxi)" class="edit-btn">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button (click)="deleteTaxi(taxi)" class="delete-btn">
+            <i class="fas fa-trash"></i> Remove
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #noTaxis>
+    <div class="no-data">
+      No taxis registered yet.
+    </div>
+  </ng-template>
+</div>

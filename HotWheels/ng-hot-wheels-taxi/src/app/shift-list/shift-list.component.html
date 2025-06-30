@@ -1,0 +1,61 @@
+<div class="shift-list">
+    <h3>Ongoing Shifts</h3>
+    <div *ngIf="ongoingShifts.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Taxi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let shift of ongoingShifts">
+            <td>{{ shift.period.beginning | date:'medium' }}</td>
+            <td>{{ shift.period.ending | date:'medium' }}</td>
+            <td>{{ shift.taxi.licensePlate }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Upcoming Shifts</h3>
+    <div *ngIf="upcomingShifts.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Taxi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let shift of upcomingShifts">
+            <td>{{ shift.period.beginning | date:'medium' }}</td>
+            <td>{{ shift.period.ending | date:'medium' }}</td>
+            <td>{{ shift.taxi.licensePlate }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Past Shifts</h3>
+    <div *ngIf="pastShifts.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Taxi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let shift of pastShifts">
+            <td>{{ shift.period.beginning | date:'medium' }}</td>
+            <td>{{ shift.period.ending | date:'medium' }}</td>
+            <td>{{ shift.taxi.licensePlate }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div>

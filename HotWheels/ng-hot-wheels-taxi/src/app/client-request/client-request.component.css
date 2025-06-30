@@ -1,0 +1,354 @@
+:host {
+  display: block;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f9;
+  color: #333;
+  --marker-icon-url: url('https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png');
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+h1, h2 {
+  color: #2c387e;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+form {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  margin-bottom: 2.5rem;
+  text-align: left;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-top: 1.2rem;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.15);
+}
+
+button {
+  font-family: inherit;
+  font-weight: 500;
+  margin-top: 2rem;
+  padding: 0.9rem 2rem;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover:enabled {
+  background-color: #2c387e;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #d32f2f;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+
+.location-method-btn {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.location-method-btn:hover:not([disabled]) {
+  background-color: #303f9f;
+  transform: translateY(-1px);
+}
+
+.location-method-btn[disabled] {
+  background-color: #b0bec5;
+  cursor: not-allowed;
+}
+
+.location-method-btn.active {
+  background-color: #303f9f;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.map-container {
+  margin: 15px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+#map {
+  height: 350px;
+  width: 100%;
+  min-height: 300px;
+}
+
+.map-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.map-confirm-btn {
+  flex: 1;
+  padding: 10px;
+  background-color:#3f51b5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  
+}
+
+.map-confirm-btn:hover {
+  background-color:  #303f9f;
+}
+
+.map-confirm-btn:disabled {
+  background-color: #b0bec5;
+  cursor: not-allowed;
+}
+
+.map-cancel-btn {
+  flex: 1;
+  padding: 10px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.map-cancel-btn:hover {
+  background-color: #961919;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover:enabled {
+  background-color: #303f9f;
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.current-location-btn {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  background-color: #3f51b5;;
+  color:  white;
+  border: 1px solid #7eeaf8;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.map-toggle-btn {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  background-color: #3f51b5;
+  color:  white;
+  border: 1px solid #7eeaf8;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.submission-result {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.success-message {
+  color: green;
+}
+
+.error-message {
+  color: red;
+}
+
+.dashboard-btn, .retry-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.retry-btn {
+  background: #dc3545;
+}
+
+.request-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+
+.submission-result {
+  margin-top: 2rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+:host ::ng-deep {
+  .leaflet-marker-icon {
+    background-image: var(--marker-icon-url);
+  }
+  
+  .leaflet-marker-icon.leaflet-zoom-animated {
+    background-image: var(--marker-icon-2x-url);
+  }
+  
+  .leaflet-marker-shadow {
+    background-image: var(--marker-shadow-url);
+  }
+  
+  .leaflet-popup-content {
+    font-size: 14px;
+    padding: 8px;
+  }
+  
+  .leaflet-popup-content-wrapper {
+    border-radius: 4px;
+  }
+}
+
+@media (max-width: 768px) {
+  form {
+    padding: 1.2rem;
+  }
+  
+  #map {
+    height: 250px;
+  }
+  
+  button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  th, td {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background-color: #f1f3f5;
+  font-weight: 700;
+  color: #444;
+}
+
+td button {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  background-color: #e53935;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+td button:hover {
+  background-color: #c62828;
+}

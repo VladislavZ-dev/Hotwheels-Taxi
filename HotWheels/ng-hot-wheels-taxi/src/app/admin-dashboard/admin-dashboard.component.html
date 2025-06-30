@@ -1,0 +1,60 @@
+<div class="dashboard-container">
+  <div class="container">
+    <header>
+      <div class="header">
+        <h1>Welcome To Hot Wheels, Admin!</h1>
+      </div>
+    </header>
+    
+    <!-- New trip-related cards at the top, styled as clickable buttons -->
+    <section class="dashboard-metrics">
+      <a routerLink="/admin/reports" [queryParams]="{view: 'trips'}" class="metric-card">
+        <h3>Total Trips</h3>
+        <p class="big-number">{{totalTrips}}</p>
+        <span class="view-more">View Details</span>
+      </a>
+      <a routerLink="/admin/reports" [queryParams]="{view: 'hours'}" class="metric-card">
+        <h3>Total Hours</h3>
+        <p class="big-number">{{this.tripService.formatHours(totalHours)}}</p>
+        <span class="view-more">View Details</span>
+      </a>
+      <a routerLink="/admin/reports" [queryParams]="{view: 'distance'}" class="metric-card">
+        <h3>Total Distance</h3>
+        <p class="big-number">{{this.tripService.formatDistance(totalDistance)}} </p>
+        <span class="view-more">View Details</span>
+      </a>
+    </section>
+    
+    <!-- Original cards transformed into clickable links -->
+    <section class="dashboard-cards">
+      <a routerLink="/admin/taxis" class="card">
+        <h3>Total Taxis</h3>
+        <p>{{numberOfTaxis}}</p>
+      </a>
+      <a routerLink="/admin/drivers" class="card">
+        <h3>Total Drivers</h3>
+        <p>{{numberOfDrivers}}</p>
+      </a>
+      <a routerLink="/admin/prices" [queryParams]="{type: 'basic'}" class="card">
+        <h3>Current Basic Price</h3>
+        <p>{{basicPrice}}</p>
+      </a>
+      <a routerLink="/admin/prices" [queryParams]="{type: 'luxury'}" class="card">
+        <h3>Current Luxurious Price</h3>
+        <p>{{luxuryPrice}}</p>
+      </a>
+      <a routerLink="/admin/prices" [queryParams]="{type: 'night'}" class="card">
+        <h3>Current Night Fee</h3>
+        <p>{{nightFee}}%</p>
+      </a>
+    </section>
+    
+    <!-- Original action buttons, kept for consistency -->
+    <section class="dashboard-actions">
+      <a routerLink="/admin/taxis" routerLinkActive="active" class="btn-primary">Manage Taxis</a>
+      <a routerLink="/admin/drivers" routerLinkActive="active" class="btn-primary">Manage Drivers</a>
+      <a routerLink="/admin/prices" routerLinkActive="active" class="btn-primary">Manage Prices</a>
+      <a routerLink="/admin/reports" routerLinkActive="active" class="btn-primary">View reports</a>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+<div class="reserve-taxi">
+  <h2>Reserve Taxi for Your Shift</h2>
+
+  <form [formGroup]="periodForm" *ngIf="!isTaxiList" (ngSubmit)="onSubmitPeriod()" class="reserve-form">
+    <div class="form-group">
+      <label for="beginningHour">Shift Beginning Hour:</label>
+      <input id="beginningHour" formControlName="beginningHour" type="datetime-local" required
+             [class.is-invalid]="isFieldInvalid('beginningHour')">
+      <div *ngIf="isFieldInvalid('beginningHour')" class="error-message">
+        {{ getValidationMessage('beginningHour') }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="endingHour">Shift Ending Hour:</label>
+      <input id="endingHour" formControlName="endingHour" type="datetime-local" required
+             [class.is-invalid]="isFieldInvalid('endingHour')">
+      <div *ngIf="isFieldInvalid('endingHour')" class="error-message">
+        {{ getValidationMessage('endingHour') }}
+      </div>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message overlap-error">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="formErrors.length > 0" class="form-errors">
+      <div *ngFor="let error of formErrors" class="error-message">
+        {{ error }}
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="periodForm.invalid || isLoading" class="btn-continue">
+      <span *ngIf="!isLoading">Continue</span>
+      <span *ngIf="isLoading">Checking Availability...</span>
+    </button>
+  </form>
+
+  <div *ngIf="isTaxiList && !shiftAdded" class="choose-taxi">
+    <h3>Choose Taxi</h3>
+    <div *ngIf="availableTaxis.length > 0; else noTaxis" class="taxi-list">
+      <table>
+        <thead>
+          <tr>
+            <th>Action</th>
+            <th>License Plate</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Confort Level</th>
+            <th>Acquisition Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let taxi of availableTaxis">
+            <td>
+              <button (click)="selectTaxi(taxi)" class="btn-select">
+                Select
+              </button>
+            </td>
+            <td>{{ taxi.licensePlate }}</td>
+            <td>{{ taxi.brand }}</td>
+            <td>{{ taxi.model }}</td>
+            <td>{{ taxi.confortLevel }}</td>
+            <td>{{ taxi.acquisitionYear }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noTaxis>
+      <div class="no-taxis-message">
+        No taxis available for the selected time period.
+      </div>
+    </ng-template>
+  </div>
+
+  <div *ngIf="shiftAdded" class="success-message">
+    <h3>Shift Registered Successfully!</h3>
+    <a routerLink="/driver/shift-list" class="btn-primary">View Your Shifts</a>
+  </div>
+</div>

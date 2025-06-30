@@ -1,0 +1,154 @@
+<div class="container">
+  <!-- Error message alert -->
+  <div *ngIf="showError" class="error-alert">
+    <div class="error-content">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ errorMessage }}</span>
+      <button class="close-btn" (click)="hideErrorMessage()">×</button>
+    </div>
+  </div>
+
+  <div class="driver-actions">
+    <h1>Driver Management</h1>
+    <button *ngIf="!showForm" (click)="toggleForm()" class="action-btn add-btn">
+      <i class="fas fa-plus"></i> Add New Driver
+    </button>
+  </div>
+  
+  <div *ngIf="showForm" class="form-container">
+    <h2>{{ isEditing ? 'Edit' : 'Register' }} Driver</h2>
+    <form [formGroup]="driverForm" (ngSubmit)="onSubmit()">
+      <div formGroupName="person">
+        <label for="nif">NIF:</label>
+        <input 
+          id="nif" 
+          formControlName="nif" 
+          placeholder="123456789" 
+          maxlength="9"
+        />
+        <div *ngIf="driverForm.get('person.nif')?.invalid && driverForm.get('person.nif')?.touched" class="error-msg">
+          <div *ngIf="driverForm.get('person.nif')?.errors?.['required']">NIF is required</div>
+          <div *ngIf="driverForm.get('person.nif')?.errors?.['pattern']">Must be exactly 9 digits</div>
+        </div>
+
+        <label for="name">Name:</label>
+        <input id="name" formControlName="name" />
+        <div *ngIf="driverForm.get('person.name')?.invalid && driverForm.get('person.name')?.touched" class="error-msg">
+          Name is required.
+        </div>
+
+        <label for="gender">Gender:</label>
+        <select id="gender" formControlName="gender">
+          <option value="">-- Select Gender --</option>
+          <option *ngFor="let g of genders" [value]="g">{{ g }}</option>
+        </select>
+        <div *ngIf="driverForm.get('person.gender')?.invalid && driverForm.get('person.gender')?.touched" class="error-msg">
+          Please select a gender.
+        </div>
+      </div>
+
+      <label for="birthYear">Birth Year:</label>
+      <input 
+        id="birthYear" 
+        type="number" 
+        formControlName="birthYear" 
+        min="1900" 
+        [max]="currentYear"
+      />
+      <div *ngIf="driverForm.get('birthYear')?.invalid && driverForm.get('birthYear')?.touched" class="error-msg">
+        <div *ngIf="driverForm.get('birthYear')?.errors?.['required']">Birth year is required</div>
+        <div *ngIf="driverForm.get('birthYear')?.errors?.['min'] || driverForm.get('birthYear')?.errors?.['max']">
+          Must be between 1900 and {{currentYear}}
+        </div>
+      </div>
+
+      <label for="driversLicense">Driver's License:</label>
+      <input id="driversLicense" formControlName="driversLicense" />
+      <div *ngIf="driverForm.get('driversLicense')?.invalid && driverForm.get('driversLicense')?.touched" class="error-msg">
+        Driver's license number is required.
+      </div>
+
+      <div formGroupName="address">
+        <label for="street">Street:</label>
+        <input id="street" formControlName="street" placeholder="Main Street" />
+        <div *ngIf="driverForm.get('address.street')?.invalid && driverForm.get('address.street')?.touched" class="error-msg">
+          Street is required.
+        </div>
+
+        <label for="doorNumber">Door Number:</label>
+        <input 
+          id="doorNumber" 
+          type="text" 
+          formControlName="doorNumber" 
+          placeholder="123" 
+        />
+        <div *ngIf="driverForm.get('address.doorNumber')?.invalid && driverForm.get('address.doorNumber')?.touched" class="error-msg">
+          <div *ngIf="driverForm.get('address.doorNumber')?.errors?.['required']">Door number is required</div>
+          <div *ngIf="driverForm.get('address.doorNumber')?.errors?.['pattern']">Must be a valid number</div>
+        </div>
+
+        <label for="postCode">Post Code:</label>
+        <input 
+          id="postCode" 
+          formControlName="postCode" 
+          placeholder="1234-567" 
+          (input)="formatPostalCode($event)"
+          maxlength="8"
+        />
+        <div *ngIf="driverForm.get('address.postCode')?.invalid && driverForm.get('address.postCode')?.touched" class="error-msg">
+          <div *ngIf="driverForm.get('address.postCode')?.errors?.['required']">Post code is required</div>
+          <div *ngIf="driverForm.get('address.postCode')?.errors?.['pattern']">Must be in format 1234-567</div>
+        </div>
+
+        <label for="locality">Locality:</label>
+        <input id="locality" formControlName="locality" placeholder="Lisbon" readonly />
+        <div *ngIf="driverForm.get('address.locality')?.invalid && driverForm.get('address.locality')?.touched" class="error-msg">
+          Locality is required.
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="submit-btn" [disabled]="driverForm.invalid">
+          {{ isEditing ? 'Update' : 'Register' }} Driver
+        </button>
+        <button type="button" class="cancel-btn" (click)="toggleForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
+  
+  <h2>Driver List</h2>
+  <table *ngIf="drivers.length > 0; else noDrivers">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>NIF</th>
+        <th>Locality</th>
+        <th>License</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let driver of drivers">
+        <td>{{ driver.person?.name }}</td>
+        <td>{{ driver.person?.gender }}</td>
+        <td>{{ driver.person?.nif }}</td>
+        <td>{{ driver.address?.locality }}</td>
+        <td>{{ driver.driversLicense }}</td>
+        <td class="actions-cell">
+          <button (click)="editDriver(driver)" class="edit-btn">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button (click)="deleteDriver(driver)" class="delete-btn">
+            <i class="fas fa-trash"></i> Remove
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #noDrivers>
+    <div class="no-data">
+      No drivers registered yet.
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,19 @@
+<h1>Past Trips</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Sequence Number</th>
+      <th>Departure Date</th>
+      <th>Number of People</th>
+      <th>Taxi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let trip of trips">
+      <td>{{ trip.sequence }}</td>
+      <td>{{ trip.period.beginning | date: 'short' }}</td> <!-- Format the date as needed -->
+      <td>{{ trip.numPeople }}</td>
+      <td>{{ trip.taxi.licensePlate }}</td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,126 @@
+<h1>Register Trip</h1>
+
+<div class="trip-form-container">
+  <div *ngIf="!tripSubmitted">
+    <!-- Trip Request Selection -->
+    <div class="form-section">
+      <label class="form-label">
+        Select Trip Request:
+        <select (change)="onRequestSelect($event)" class="form-select">
+          <option value="">-- Choose a request --</option>
+          <option *ngFor="let req of tripRequests" [value]="req._id">
+            {{ req.pickup.address.street }} → {{ req.destination.address.street }} : {{ req.passengers }} (number of passengers)
+          </option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Trip Registration Form -->
+    <form [formGroup]="tripForm" (ngSubmit)="onSubmit()" class="trip-form">
+      <div class="form-section">
+        <h3>Trip Details</h3>
+        
+        <div class="form-group">
+          <label class="form-label">
+            Number of passengers:
+            <input type="number" formControlName="passengers" class="form-input" />
+          </label>
+          <div *ngIf="tripForm.get('passengers')?.invalid && tripForm.get('passengers')?.touched" class="error-message">
+            Number of passengers is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            Departure Location:
+            <input formControlName="departureLocation" class="form-input" />
+          </label>
+          <div *ngIf="tripForm.get('departureLocation')?.invalid && tripForm.get('departureLocation')?.touched" class="error-message">
+            Departure location is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            Arrival Location:
+            <input formControlName="arrivalLocation" class="form-input" />
+          </label>
+          <div *ngIf="tripForm.get('arrivalLocation')?.invalid && tripForm.get('arrivalLocation')?.touched" class="error-message">
+            Arrival location is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            Departure Time:
+            <input type="datetime-local" formControlName="departureTime" class="form-input" />
+          </label>
+          <div *ngIf="tripForm.get('departureTime')?.invalid && tripForm.get('departureTime')?.touched" class="error-message">
+            Departure time is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            Arrival Time:
+            <input type="datetime-local" formControlName="arrivalTime" class="form-input" />
+          </label>
+          <div *ngIf="tripForm.get('arrivalTime')?.invalid && tripForm.get('arrivalTime')?.touched" class="error-message">
+            Arrival time is required
+          </div>
+        </div>
+
+        <!-- Taxi Selection -->
+        <div class="form-group">
+          <label class="form-label">
+            Taxi:
+            <input formControlName="taxi_plate" class="form-input" [readonly]="tripForm.value.taxi_plate" />
+          </label>
+          <div *ngIf="tripForm.get('taxi_plate')?.invalid && tripForm.get('taxi_plate')?.touched" class="error-message">
+            Taxi is required
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          [disabled]="tripForm.invalid || calculatingData" 
+          class="submit-btn">
+          <span *ngIf="!calculatingData">Confirm Trip</span>
+          <span *ngIf="calculatingData">Calculating...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Feedback Messages -->
+  <div *ngIf="tripSubmitted" class="submission-result">
+    <div *ngIf="tripSuccess" class="success-message">
+      <h2>Trip Successfully Registered!</h2>
+      <p>Your trip has been registered in the system.</p>
+      <div class="trip-details" *ngIf="selectedRequest">
+        <h3>Trip Details</h3>
+        <p><strong>From:</strong> {{tripForm.value.departureLocation}}</p>
+        <p><strong>To:</strong> {{tripForm.value.arrivalLocation}}</p>
+        <p><strong>Passengers:</strong> {{tripForm.value.passengers}}</p>
+        <p><strong>Taxi:</strong> {{tripForm.value.taxi_plate}}</p>
+        <p><strong>Distance:</strong> {{selectedRequest.trip_distance | number:'1.1-1'}} km</p>
+        <p><strong>Price:</strong> €{{selectedRequest.trip_price | number:'1.2-2'}}</p>
+      </div>
+      <button (click)="goToDashboard()" class="dashboard-btn">
+        Go to Dashboard
+      </button>
+    </div>
+    
+    <div *ngIf="!tripSuccess" class="error-message">
+      <h2>Registration Failed</h2>
+      <p>{{ errorMessage }}</p>
+      <button (click)="retrySubmission()" class="retry-btn">
+        Try Again
+      </button>
+    </div>
+  </div>
+</div>

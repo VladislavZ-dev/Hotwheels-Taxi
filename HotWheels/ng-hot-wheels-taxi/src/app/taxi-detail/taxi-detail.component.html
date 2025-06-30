@@ -1,0 +1,38 @@
+<form [formGroup]="taxiForm" (ngSubmit)="onSubmit()">
+  <label>License Plate:</label>
+  <input formControlName="licensePlate" />
+  <div *ngIf="taxiForm.get('licensePlate')?.invalid && taxiForm.get('licensePlate')?.touched">
+    Invalid License Plate (needs to contain both lettes and numbers).
+  </div>
+
+  <label>Brand:</label>
+  <select formControlName="brand">
+    <option *ngFor="let b of brand" [value]="b">{{ b }}</option>
+  </select>
+
+  <label>Model:</label>
+  <select formControlName="model">
+    <option *ngFor="let m of model" [value]="m">{{ m }}</option>
+  </select>
+
+  <label>Confort Level:</label>
+  <input formControlName="confortLevel" placeholder="RIA 16" />
+  <div *ngIf="taxiForm.get('confortLevel')?.invalid && taxiForm.get('confortLevel')?.touched">
+    Must be either basic or luxurious.
+  </div>
+
+  <label>Acquisition Year:</label>
+  <input type="number" formControlName="acquisitionYear" />
+  <div *ngIf="taxiForm.get('acquisitionYear')?.invalid && taxiForm.get('acquisitionYear')?.touched">
+    The year must be equal or inferior than {{ currentYear }}.
+  </div>
+
+  <button type="submit" [disabled]="taxiForm.invalid">Register Taxi</button>
+</form>
+
+<h2>Taxis</h2>
+<ul>
+  <li *ngFor="let t of taxis">
+    {{ t.licensePlate }} - {{ t.brand }} {{ t.model }} ({{ t.acquisitionYear }})
+  </li>
+</ul>

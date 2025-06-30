@@ -1,0 +1,84 @@
+<div class="dashboard-container">
+  <div class="container">
+    <header>
+      <div class="header">
+        <h1>Welcome To Hot Wheels!</h1>
+      </div>
+    </header>
+
+    <section class="dashboard-actions">
+      <a routerLink="/client/client-request" routerLinkActive="active" class="btn-primary">Make a Taxi Request!</a>
+    </section>
+
+     <!-- Driver Accepted Requests Section -->
+    <section *ngIf="driverAcceptedRequests.length > 0" class="accepted-requests">
+      <h2>Driver Responses</h2>
+      <p>You have {{ driverAcceptedRequests.length }} driver(s) waiting for your confirmation</p>
+      
+      <div *ngFor="let request of driverAcceptedRequests" class="request-card accepted">
+        <div class="request-info">
+          <h3>Request #{{ request._id | slice:0:8 }}</h3>
+          
+          <div class="driver-info" *ngIf="request.driver?.info">
+            <h4>Driver Information</h4>
+            <p><strong>Name:</strong> {{ request.driver?.info?.person?.name || 'Unknown' }}</p>
+            <p><strong>License:</strong> {{ request.driver?.info?.driversLicense || 'N/A' }}</p>
+            <p><strong>Estimated Arrival:</strong> {{ request.driver?.estimatedArrival || 'N/A' }} minutes</p>
+          </div>
+
+          <div class="taxi-info" *ngIf="request.shift">
+            <h4>Taxi Information</h4>
+            <p><strong>Vehicle:</strong> {{ request.shift.taxi.brand }} {{ request.shift.taxi.model }}</p>
+            <p><strong>License Plate:</strong> {{ request.shift.taxi.licensePlate }}</p>
+            <p><strong>Comfort Level:</strong> {{ request.shift.taxi.confortLevel || request.comfort }}</p>
+            <p><strong>Acquisition Year:</strong> {{ request.shift.taxi.acquisitionYear || 'N/A' }}</p>
+          </div>
+
+          <div class="ride-info">
+            <h4>Ride Details</h4>
+            <p><strong>From:</strong> {{ request.pickup.address.street }}, {{ request.pickup.address.locality }}</p>
+            <p><strong>To:</strong> {{ request.destination.address.street }}, {{ request.destination.address.locality }}</p>
+            <p><strong>Distance:</strong> {{ request.trip_distance?.toFixed(1) || 'N/A' }} km</p>
+            <p><strong>Estimated Price:</strong> {{ request.priceEstimate?.toFixed(2) || 'N/A' }} €</p>
+            <p><strong>Passengers:</strong> {{ request.passengers }}</p>
+            <p><strong>Requested Comfort:</strong> {{ request.comfort }}</p>
+          </div>
+        </div>
+        <div class="request-actions">
+          <button (click)="confirmRequest(request._id)" class="confirm-btn">
+            Accept Driver
+          </button>
+          <button (click)="rejectDriver(request._id)" class="reject-btn">
+            Reject Driver
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Pending Requests Section -->
+    <section *ngIf="pendingRequests.length > 0" class="pending-requests">
+      <h2>Your Pending Requests</h2>
+      
+      <div *ngFor="let request of pendingRequests" class="request-card">
+        <div class="request-info">
+          <h3>Request #{{ request._id | slice:0:8 }}</h3>
+          <p><strong>Status:</strong> {{ request.status }}</p>
+          <p><strong>Client Nif:</strong> {{ request.customer.nif }}</p>
+          <p><strong>Client Name:</strong> {{ request.customer.name }}</p>
+          <p><strong>Pickup:</strong> {{ request.pickup.address.street }}</p>
+          <p><strong>Destination:</strong> {{ request.destination.address.street }}</p>
+          <p><strong>Passengers:</strong> {{ request.passengers }}</p>
+          <p><strong>Comfort:</strong> {{ request.comfort }}</p>
+        </div>
+        <button (click)="cancelRequest(request._id)" class="cancel-btn">
+          Cancel Request
+        </button>
+      </div>
+    </section>
+
+    <section *ngIf="pendingRequests.length === 0" class="no-requests">
+      <p>You have no pending requests. Start a new trip!</p>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,180 @@
+<div class="report-container">
+  <div class="date-controls">
+    <label>
+      Start Date:
+      <input type="datetime-local" [ngModel]="getDisplayDate(startDate)" (change)="onStartDateChange($event)">
+    </label>
+    <label>
+      End Date:
+      <input type="datetime-local" [ngModel]="getDisplayDate(endDate)" (change)="onEndDateChange($event)">
+    </label>
+    <button (click)="loadSummaryData()">Refresh</button>
+  </div>
+  
+    <!-- Summary View -->
+    <div *ngIf="currentView === 'summary'" class="summary-view">
+      <h2>Summary Report</h2>
+      <div class="summary-cards">
+        <div class="summary-card" (click)="showAllTrips()">
+          <h3>Total Trips</h3>
+          <p class="big-number">{{totalTrips}}</p>
+          <p class="click-hint">Click to view all trips</p>
+        </div>
+        <div class="summary-card" (click)="showAllTrips()">
+          <h3>Total Hours</h3>
+          <p class="big-number">{{tripService.formatHours(totalHours)}}</p>
+          <p class="click-hint">Click to view all trips</p>
+        </div>
+        <div class="summary-card" (click)="showAllTrips()">
+          <h3>Total Distance</h3>
+          <p class="big-number">{{tripService.formatDistance(totalDistance)}}</p>
+          <p class="click-hint">Click to view all trips</p>
+        </div>
+      </div>
+      
+      <div class="breakdown-options">
+        <button (click)="showDriverBreakdown('trips')">View Breakdown by Driver</button>
+        <button (click)="showTaxiBreakdown('trips')">View Breakdown by Taxi</button>
+        <button (click)="showAllTrips()">View All Trips</button>
+      </div>
+    </div>
+  
+    <!-- Driver Breakdown View -->
+    <div *ngIf="currentView === 'byDriver'" class="breakdown-view">
+      <h2>Breakdown by Driver ({{selectedMetric}})</h2>
+      <button class="back-button" (click)="loadSummaryData()">← Back to Summary</button>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Driver</th>
+            <th (click)="selectedMetric = 'trips'">Trips {{selectedMetric === 'trips' ? '▼' : ''}}</th>
+            <th (click)="selectedMetric = 'hours'">Hours {{selectedMetric === 'hours' ? '▼' : ''}}</th>
+            <th (click)="selectedMetric = 'distance'">Distance {{selectedMetric === 'distance' ? '▼' : ''}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of driversBreakdown" (click)="showDriverTrips(item.driver)">
+            <td>{{item.driver.person?.name}}</td>
+            <td>{{item.trips}}</td>
+            <td>{{tripService.formatHours(item.hours)}}</td>
+            <td>{{tripService.formatDistance(item.distance)}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Taxi Breakdown View -->
+    <div *ngIf="currentView === 'byTaxi'" class="breakdown-view">
+      <h2>Breakdown by Taxi ({{selectedMetric}})</h2>
+      <button class="back-button" (click)="loadSummaryData()">← Back to Summary</button>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Taxi</th>
+            <th (click)="selectedMetric = 'trips'">Trips {{selectedMetric === 'trips' ? '▼' : ''}}</th>
+            <th (click)="selectedMetric = 'hours'">Hours {{selectedMetric === 'hours' ? '▼' : ''}}</th>
+            <th (click)="selectedMetric = 'distance'">Distance {{selectedMetric === 'distance' ? '▼' : ''}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of taxisBreakdown" (click)="showTaxiTrips(item.taxi)">
+            <td>{{item.taxi.licensePlate}} ({{item.taxi.model}})</td>
+            <td>{{item.trips}}</td>
+            <td>{{tripService.formatHours(item.hours)}}</td>
+            <td>{{tripService.formatDistance(item.distance)}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Trip Details View -->
+    <div *ngIf="currentView === 'tripDetails'" class="details-view">
+      <h2>
+        Trip Details for 
+        <span *ngIf="selectedDriver">{{selectedDriver.person?.name || 'Unknown Driver'}}</span>
+        <span *ngIf="selectedTaxi">{{selectedTaxi.licensePlate || 'Unknown Vehicle'}}</span>
+      </h2>
+      <button class="back-button" (click)="selectedDriver ? showDriverBreakdown(selectedMetric) : showTaxiBreakdown(selectedMetric)">
+        ← Back to {{selectedDriver ? 'Drivers' : 'Taxis'}}
+      </button>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Duration</th>
+            <th>Distance</th>
+            <th *ngIf="selectedTaxi">Driver</th>
+            <th *ngIf="selectedDriver">Taxi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let trip of tripsDetails">
+            <td>{{trip.period.beginning | date:'medium'}}</td>
+            <td>{{trip.period.ending | date:'medium'}}</td>
+            <td>{{tripService.formatHours(trip.time)}}</td>
+            <td>{{tripService.formatDistance(trip.distance)}}</td>
+            <td *ngIf="selectedTaxi">
+              {{getDriverNameSafely(trip.driver)}}
+            </td>
+            <td *ngIf="selectedDriver">{{trip.taxi.licensePlate || 'N/A'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- All Trips View -->
+    <div *ngIf="currentView === 'allTrips'" class="all-trips-view">
+      <h2>All Trips</h2>
+      <button class="back-button" (click)="loadSummaryData()">← Back to Summary</button>
+      
+      <div class="filter-controls">
+        <input type="text" placeholder="Search by driver name or taxi..." [(ngModel)]="tripFilter" (keyup)="filterTrips()">
+        <select [(ngModel)]="tripSortField" (change)="sortTrips()">
+          <option value="startTime">Sort by Start Time</option>
+          <option value="endTime">Sort by End Time</option>
+          <option value="duration">Sort by Duration</option>
+          <option value="distance">Sort by Distance</option>
+        </select>
+        <button (click)="toggleSortDirection()">
+          {{sortDirection === 'asc' ? 'Ascending ↑' : 'Descending ↓'}}
+        </button>
+      </div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Sequence #</th>
+            <th>Driver</th>
+            <th>Taxi</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Duration</th>
+            <th>Distance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let trip of filteredTrips">
+            <td>{{trip.sequence}}</td>
+            <td>{{getDriverNameSafely(trip.driver)}}</td>
+            <td>{{trip.taxi.licensePlate}} ({{trip.taxi.model}})</td>
+            <td>{{trip.period.beginning | date:'medium'}}</td>
+            <td>{{trip.period.ending | date:'medium'}}</td>
+            <td>{{tripService.formatHours(trip.time)}}</td>
+            <td>{{tripService.formatDistance(trip.distance)}}</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div class="pagination-controls" *ngIf="paginatedTrips.length > 1">
+        <button [disabled]="currentPage === 0" (click)="changePage(currentPage - 1)">Previous</button>
+        <span *ngFor="let page of paginatedTrips; let i = index">
+          <button [class.active]="i === currentPage" (click)="changePage(i)">{{i + 1}}</button>
+        </span>
+        <button [disabled]="currentPage === paginatedTrips.length - 1" (click)="changePage(currentPage + 1)">Next</button>
+      </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<div [class.driver-logged-in]="authService.isLoggedIn" [class.driver-not-logged-in]="!authService.isLoggedIn">
+  <button class="toggle-sidebar-btn" (click)="toggleSidebar()" *ngIf="authService.isLoggedIn">☰</button>
+  
+  <div class="sidebar" 
+       [class.collapsed]="isSidebarCollapsed" 
+       *ngIf="authService.isLoggedIn">
+    <h2 class="sidebar-title">
+      <a routerLink="/driver/driver-dashboard">Dashboard</a>
+    </h2>
+
+  <ul class="sidebar-links">
+    <li><a routerLink="/driver/driver-request" routerLinkActive="active">My Requests</a></li>
+    <li><a routerLink="/driver/reserve-taxi" routerLinkActive="active">Reserve Taxi for Shift</a></li>
+    <li><a routerLink="/driver/shift-list" routerLinkActive="active">Shift List</a></li>
+    <li><a routerLink="/driver/past-trips" routerLinkActive="active">Past Trips</a></li>
+    <li><a routerLink="/driver/register-trip-form" routerLinkActive="active">Register new Trip</a></li>
+    <li><a (click)="logout()">Logout</a></li>
+  </ul>
+</div>
+
+  <main class="main-content" 
+        [class.sidebar-collapsed]="isSidebarCollapsed && authService.isLoggedIn"
+        [class.full-width]="!authService.isLoggedIn"> 
+    <router-outlet></router-outlet>
+  </main>
+</div>
